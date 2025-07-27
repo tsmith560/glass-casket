@@ -1,0 +1,1 @@
+Bash script to bootstrap the project (optional).
