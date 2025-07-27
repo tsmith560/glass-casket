@@ -26,17 +26,26 @@ def log_model_version(version_name, model_type, notes=None):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        INSERT INTO model_versions (version_name, model_type, date_logged, notes)
-        VALUES (%s, %s, %s, %s)
-        RETURNING id;
-    """, (version_name, model_type, datetime.now(), notes))
+    try:
+        cur.execute("SELECT id FROM model_versions WHERE version_name =%s", (version_name, ))
+        result = cur.fetchone()
+        if result:
+            print(f"[INFO] Model version '{version_name}' already exists. ID: {result[0]}")
+            return result[0]
 
-    version_id = cur.fetchone()[0]
-    conn.commit()
-    cur.close()
-    conn.close()
-    return version_id
+        cur.execute("""
+            INSERT INTO model_versions (version_name, model_type, date_registered, notes)
+            VALUES (%s, %s, %s, %s)
+            RETURNING id;
+        """, (version_name, model_type, datetime.now(), notes))
+        version_id = cur.fetchone()[0]
+        conn.commit()
+        print(f"[INFO] Logged model version '{version_name}' with ID: {version_id}")
+        return version_id
+    
+    finally:
+        cur.close()
+        conn.close()
 
 def log_prediction(version_id, input_text, prediction_text):
     conn = get_connection()
