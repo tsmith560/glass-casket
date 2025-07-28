@@ -1,14 +1,14 @@
-# src/test_openai.py
-import openai
-from dotenv import load_dotenv
 import os
+from openai import OpenAI
+from dotenv import load_dotenv
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-response = openai.ChatCompletion.create(
-    model="gpt-4",
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
     messages=[{"role": "user", "content": "What does the Exhumer do?"}]
 )
 
-print(response.choices[0].message["content"])
+print(response.choices[0].message.content)
+

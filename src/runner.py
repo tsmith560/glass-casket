@@ -1,24 +1,23 @@
 # src/runner.py
 
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 from dotenv import load_dotenv
 import os
 from logger import log_model_version, log_prediction
 
 # Load environment variables
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def call_gpt4(prompt):
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7
-        )
-        return response.choices[0].message["content"].strip()
+        response = client.chat.completions.create(model="gpt-4",
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7)
+        return response.choices[0].message.content.strip()
     except Exception as e:
         print(f"[ERROR] Failed to get response from GPT-4: {e}")
         return None
