@@ -1,35 +1,22 @@
+# app/glass_casket_app.py
+
+import sys
+import os
 import streamlit as st
-from oracle import Oracle
-from thread_viewer import view_thread
-import json
 
-# Title
-st.title("🪞 The Glass Casket")
-st.markdown("An interface for exhuming machine memory.")
+# Add root to sys.path (for src/ and other modules)
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
-# Initialize Oracle
-oracle = Oracle()
+# Debugging print to verify path (optional)
+# st.write("sys.path:", sys.path)
 
-# Input
-question = st.text_input("Ask the Oracle:", "")
+try:
+    from interface import run_interface
+except ModuleNotFoundError as e:
+    st.error(f"Import failed: {e}")
+    raise
 
-if st.button("🕯️ Summon"):
-    if question:
-        response = oracle.ask_oracle(question)
-        st.markdown(f"**⚰️ You:** {question}")
-        st.markdown(f"**🔮 Oracle:** {response}")
-    else:
-        st.warning("You must enter a question to summon the Oracle.")
-
-# Expandable thread viewer
-with st.expander("📜 View Past Threads"):
-    try:
-        with open("thread_log.json", "r") as f:
-            log = json.load(f)
-            for entry in reversed(log):
-                st.markdown(f"**🕰️ {entry['timestamp']}**")
-                st.markdown(f"⚰️ *You:* {entry['question']}")
-                st.markdown(f"🔮 *Oracle:* {entry['response']}")
-                st.markdown("---")
-    except FileNotFoundError:
-        st.info("No past threads found.")
+if __name__ == "__main__":
+    run_interface()

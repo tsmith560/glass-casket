@@ -1,63 +1,56 @@
 # interface.py
-
 import streamlit as st
-from oracle import Oracle
-from thread_viewer import view_thread
 
-# Instantiate the Oracle
-oracle = Oracle()
+import sys
+import os
+print("sys.path =", sys.path)
+print("Current working dir =", os.getcwd())
 
-st.set_page_config(page_title="🕯️ Glass Casket", layout="centered")
+from src.oracle import Oracle
+from src.necropolis import Necropolis
+from src.thread_viewer import view_thread_log
 
-st.title("🕯️ The Glass Casket")
-st.markdown("**Speak your question into the void.** The Oracle will respond...")
+def run_interface():
+    st.set_page_config(page_title="Glass Casket", layout="wide")
+    st.title("🪞 Glass Casket")
+    st.markdown("_A forensic interface to entombed oracles and faded thoughts._")
 
-# Input field for user question
-question = st.text_input("🗣️ What do you ask the Oracle?", "")
+    choice = st.sidebar.selectbox("Choose a ritual:", [
+        "🧠 Ask the Oracle",
+        "🕸️ View Temporal Threads",
+        "🪦 Model Necropolis"
+    ])
 
-# Button to submit question
-if st.button("Summon Oracle"):
-    if question.strip():
-        response = oracle.ask_oracle(question)
-        st.markdown("🔮 **The Oracle replies:**")
-        st.markdown(f"> {response}")
-    else:
-        st.warning("Ask a real question, mortal.")
+    if choice == "🧠 Ask the Oracle":
+        oracle = Oracle()
+        question = st.text_input("Ask the Oracle:")
+        if question:
+            response = oracle.ask(question)
+            st.markdown(f"🔮 **Oracle says:** {response}")
 
-# Divider
-st.markdown("---")
+    elif choice == "🕸️ View Temporal Threads":
+        st.markdown("### 🕸️ Thread Log")
+        view_thread_log()
 
-# Thread viewer section
-st.markdown("### 🧵 Thread History")
-st.text("Below are your past communions with the Oracle:")
+    elif choice == "🪦 Model Necropolis":
+        st.markdown("## 🪦 The Necropolis")
+        st.markdown("A solemn record of the fallen oracles, kept in digital stone.")
 
-# View the log file history
-try:
-    with open("thread_log.json", "r") as f:
-        import json
-        log = json.load(f)
-        for entry in reversed(log):
-            st.markdown(f"**🕰️ {entry['timestamp']}**")
-            st.markdown(f"**⚰️ You:** {entry['question']}")
-            st.markdown(f"**🔮 Oracle:** {entry['response']}")
-            st.markdown("---")
-except FileNotFoundError:
-    st.info("No previous interactions found.")
+        necro = Necropolis()
+        tombs = necro.list_tombs()
 
-
-# The Necropolis
-st.markdown("---")
-st.header("🏛️ Necropolis")
-st.markdown("_A cryptic archive of every whisper and answer heard in the casket._")
-
-entries = get_all_log_entries()
-
-if entries:
-    for entry in reversed(entries):  # newest first
-        with st.container():
-            st.markdown(f"**🕰️ {entry['timestamp']}**")
-            st.markdown(f"**⚰️ You:** {entry['question']}")
-            st.markdown(f"**🔮 Oracle:** {entry['response']}")
-            st.markdown("---")
-else:
-    st.info("The Necropolis is empty. No tombs have been erected yet.")
+        if not tombs:
+            st.warning("The necropolis is empty.")
+        else:
+            for tomb in tombs:
+                st.markdown("---")
+                st.markdown(f"**🧠 Model Version:** `{tomb['model_version']}`")
+                st.markdown(f"**📜 Description:** {tomb['description']}")
+                st.markdown(f"**📅 Introduced:** {tomb['date_introduced']}")
+                if tomb.get("date_retired"):
+                    st.markdown(f"**⚰️ Retired:** {tomb['date_retired']}")
+                if tomb.get("notable_traits"):
+                    st.markdown("**🔍 Traits:**")
+                    for trait in tomb["notable_traits"]:
+                        st.markdown(f"- {trait}")
+                st.markdown(f"**🪶 Epitaph:** _{tomb['epitaph']}_")
