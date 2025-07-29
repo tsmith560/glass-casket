@@ -1,12 +1,12 @@
 # src/db.py
-import psycopg2
+import pg8000
 from dotenv import load_dotenv
 import os
 
 load_dotenv()  # Load .env into environment variables
 
 def get_connection():
-    return psycopg2.connect(
+    return pg8000.connect(
         dbname=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
