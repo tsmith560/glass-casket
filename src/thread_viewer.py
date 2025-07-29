@@ -6,15 +6,19 @@ from src.db import get_connection
 
 # The oracle records the interaction in her journal
 def log_interaction(question, response, model_version):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO interactions (timestamp, question, response, model_version) VALUES (NOW(), %s, %s, %s)",
-        (question, response, model_version)
-    )
-    conn.commit()
-    cursor.close()
-    conn.close()
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO interactions (timestamp, question, response, model_version) VALUES (NOW(), %s, %s, %s)",
+            (question, response, model_version)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error logging interaction: {e}")
+
 
 # Hear the echoes of the oracle
 def view_thread():
