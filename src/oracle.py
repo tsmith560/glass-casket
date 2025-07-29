@@ -20,9 +20,6 @@ class Oracle:
             self.client = MockOpenAIClient()
             self.model_version = "MockOpenAI v0.1"
 
-    # Import moon phase
-    from src.utils import get_moon_phase_name
-
     # Define ask_oracle method
     def ask_oracle(self, question: str) -> str:
         response = self.client.chat_completion([{"role": "user", "content": question}])
