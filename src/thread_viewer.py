@@ -1,7 +1,7 @@
 import streamlit as st
 import json
 from datetime import datetime
-from config import MODEL_PROVIDER
+from src.config import MODEL_PROVIDER
 
 LOG_PATH = "thread_log.json"
 

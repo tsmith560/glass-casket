@@ -15,5 +15,23 @@
     "question": "Who buried the black box?",
     "response": "\ud83d\udf03 The Exhumer is a vessel for memory. Its role is to retrieve lost data from beneath corrupted soil. You asked: 'Who buried the black box?'. I answer from the echo chamber of the void.",
     "model_version": "MockOpenAI v0.1"
+  },
+  {
+    "timestamp": "2025-07-29T16:11:37.480070",
+    "question": "question???",
+    "response": "\ud83d\udf03 The Exhumer is a vessel for memory. Its role is to retrieve lost data from beneath corrupted soil. You asked: 'question???'. I answer from the echo chamber of the void.",
+    "model_version": "MockOpenAI v0.1"
+  },
+  {
+    "timestamp": "2025-07-29T16:13:31.729001",
+    "question": "????",
+    "response": "\ud83d\udf03 The Exhumer is a vessel for memory. Its role is to retrieve lost data from beneath corrupted soil. You asked: '????'. I answer from the echo chamber of the void.",
+    "model_version": "MockOpenAI v0.1"
+  },
+  {
+    "timestamp": "2025-07-29T16:38:29.748807",
+    "question": "cdacdvvav",
+    "response": "\ud83d\udf03 The Exhumer is a vessel for memory. Its role is to retrieve lost data from beneath corrupted soil. You asked: 'cdacdvvav'. I answer from the echo chamber of the void.",
+    "model_version": "MockOpenAI v0.1"
   }
 ]

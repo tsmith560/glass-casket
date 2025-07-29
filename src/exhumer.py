@@ -1,6 +1,6 @@
 # src/exhumer.py
 
-from oracle import Oracle
+from src.oracle import Oracle
 
 def main():
     oracle = Oracle()

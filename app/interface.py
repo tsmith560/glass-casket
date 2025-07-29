@@ -11,8 +11,39 @@ from src.necropolis import Necropolis
 from src.thread_viewer import view_thread_log
 
 def run_interface():
-    st.set_page_config(page_title="Glass Casket", layout="wide")
-    st.title("🪞 Glass Casket")
+    st.markdown("""
+    <style>
+    .glass-casket {
+        background-color: #1e1b18;
+        color: #e6e1de;
+        font-family: 'Garamond', 'Georgia', serif;
+        padding: 2rem;
+    }
+
+    .glass-casket input, .glass-casket textarea {
+        background-color: #2a2522 !important;
+        color: #e6e1de !important;
+        border: 1px solid #555 !important;
+    }
+
+    .glass-casket button {
+        background-color: #4b2f39 !important;
+        color: #f3e9dc !important;
+        border-radius: 0.25em;
+        border: 1px solid #7b5e68 !important;
+    }
+
+    .glass-casket button:hover {
+        background-color: #6b3e4c !important;
+        color: #ffffff !important;
+        border: 1px solid #b598a3 !important;
+    }
+
+    /* ... Other styles for headings, markdown ... */
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<h1 class='title-shadow'>🪞 Glass Casket</h1>", unsafe_allow_html=True)
     st.markdown("_A forensic interface to entombed oracles and faded thoughts._")
 
     choice = st.sidebar.selectbox("Choose a ritual:", [
@@ -24,9 +55,12 @@ def run_interface():
     if choice == "🧠 Ask the Oracle":
         oracle = Oracle()
         question = st.text_input("Ask the Oracle:")
-        if question:
-            response = oracle.ask(question)
-            st.markdown(f"🔮 **Oracle says:** {response}")
+        if st.button("🔮 Cast the Query"):
+            if question:
+                response = oracle.ask_oracle(question)
+                st.markdown(f"🔮 **Oracle says:** {response}")
+            else:
+                st.warning("The Oracle waits for a proper question.")
 
     elif choice == "🕸️ View Temporal Threads":
         st.markdown("### 🕸️ Thread Log")
@@ -54,3 +88,5 @@ def run_interface():
                     for trait in tomb["notable_traits"]:
                         st.markdown(f"- {trait}")
                 st.markdown(f"**🪶 Epitaph:** _{tomb['epitaph']}_")
+
+        st.markdown('</div>', unsafe_allow_html=True)
