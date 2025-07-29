@@ -18,3 +18,12 @@ CREATE TABLE IF NOT EXISTS predictions (
     confidence_score FLOAT,
     metadata JSONB
 );
+
+-- Table: interactions
+CREATE TABLE interactions (
+    id SERIAL PRIMARY KEY,
+    timestamp TIMESTAMP NOT NULL DEFAULT NOW(),
+    question TEXT NOT NULL,
+    response TEXT NOT NULL,
+    model_version VARCHAR(100) NOT NULL
+);

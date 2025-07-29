@@ -64,7 +64,8 @@ def run_interface():
 
     elif choice == "🕸️ View Temporal Threads":
         st.markdown("### 🕸️ Thread Log")
-        view_thread_log()
+        log_text = view_thread_log()
+        st.text_area("Past Communions", value=log_text, height=400, max_chars=None, key="thread_log")
 
     elif choice == "🪦 Model Necropolis":
         st.markdown("## 🪦 The Necropolis")
