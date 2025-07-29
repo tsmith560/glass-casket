@@ -1,46 +1,25 @@
-# src/runner.py
+# src/exhumer.py
 
-from openai import OpenAI
+from oracle import Oracle
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-from dotenv import load_dotenv
-import os
-from logger import log_model_version, log_prediction
+def main():
+    oracle = Oracle()
+    print("☿ Glass Casket // Synapse Trace Online")
+    print("Type your question. Type 'exit' or 'quit' to close the circuit.\n")
 
-# Load environment variables
-load_dotenv()
+    while True:
+        try:
+            question = input("⚰️  > ")
+            if question.lower() in ("exit", "quit"):
+                print("Closing the lid...")
+                break
 
-def call_gpt4(prompt):
-    try:
-        response = client.chat.completions.create(model="gpt-4",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7)
-        return response.choices[0].message.content.strip()
-    except Exception as e:
-        print(f"[ERROR] Failed to get response from GPT-4: {e}")
-        return None
+            response = oracle.ask_oracle(question)
+            print(f"🔮 Oracle says:\n{response}\n")
+
+        except KeyboardInterrupt:
+            print("\nInterrupted. The circuit is severed.")
+            break
 
 if __name__ == "__main__":
-    print("⚰️  Welcome to the Glass Casket Runner (a.k.a. Exhumer)")
-    prompt = input("🧠 Enter your prompt: ")
-
-    # STEP 1: Register (or reuse) model version
-    version_name = "v1.1"  # For now, hardcoded; later this could be dynamic
-    model_type = "GPT-4"
-    notes = "Runner test via CLI"
-
-    version_id = log_model_version(version_name, model_type, notes)
-    print(f"[INFO] Using model version ID: {version_id}")
-
-    # STEP 2: Call GPT-4
-    output = call_gpt4(prompt)
-    if output:
-        print(f"\n💬 Model Response:\n{output}")
-
-        # STEP 3: Log Prediction
-        log_prediction(version_id, prompt, output)
-        print(f"[INFO] Prediction logged.")
-    else:
-        print("⚠️ No output returned. Prediction not logged.")
+    main()
